@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Audio Recorder</title>
+</head>
+<body>
+	<button id="startButton">Start Recording</button>
+	<button id="stopButton" disabled>Stop Recording</button>
+	<audio id="player" controls></audio>
+
+	<script>
+		// Get the buttons and audio player
+		const startButton = document.getElementById('startButton');
+		const stopButton = document.getElementById('stopButton');
+		const player = document.getElementById('player');
+
+		// Set constraints for audio recording
+		const constraints = { audio: true, video: false };
+
+		// Define the recorder variable
+		let recorder;
+
+		// Function to start recording
+		async function startRecording() {
+			try {
+				// Get the user's microphone stream
+				const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+				// Create the MediaRecorder object
+				recorder = new MediaRecorder(stream);
+
+				// Set the recording format to WAV
+				recorder.mimeType = 'audio/wav';
+
+				// Create a new Blob to store the recorded data
+				const chunks = [];
+				recorder.ondataavailable = e => chunks.push(e.data);
+				recorder.onstop = e => {
+					const blob = new Blob(chunks, { type: 'audio/wav' });
+					const url = URL.createObjectURL(blob);
+					player.src = url;
+				};
+
+				// Start recording
+				recorder.start();
+
+				// Enable the stop button
+				startButton.disabled = true;
+				stopButton.disabled = false;
+			} catch (err) {
+				console.error('Failed to get media stream', err);
+			}
+		}
+
+		// Function to stop recording
+		function stopRecording() {
+			// Stop the recording
+			recorder.stop();
+
+			// Disable the stop button
+			stopButton.disabled = true;
+			startButton.disabled = false;
+		}
+
+		// Add event listeners to buttons
+		startButton.addEventListener('click', startRecording);
+		stopButton.addEventListener('click', stopRecording);
+	</script>
+</body>
+</html>

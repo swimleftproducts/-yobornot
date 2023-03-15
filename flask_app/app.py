@@ -1,7 +1,7 @@
 import librosa
 from flask import Flask, jsonify
 import os
-from torch_model import download_model
+import torch_model
 
 
 mode = os.environ['MODE']
@@ -15,9 +15,10 @@ if mode == 'local':
     aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID']
     aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
 
-download_model()
+torch_model.download_model(aws_access_key_id, aws_secret_access_key)
+model = torch_model.model()
 
-
+print( torch_model.predict(model,'yob_clip1.wav'))
 
 app = Flask(__name__)
 

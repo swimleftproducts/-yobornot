@@ -10,6 +10,9 @@ Running locally in docker:
     docker run --rm -p 5000:5000 -e MODE=local flask_app
 
 Running on aws:
+    freeze requirements with pipreqs
+        pipreqs . --force
+
 
     build container 
         docker build -t flask_app .

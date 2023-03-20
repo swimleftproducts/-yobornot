@@ -1,5 +1,7 @@
 boto3==1.26.91
 Flask==2.2.3
+Flask_Cors==3.0.10
 librosa==0.10.0
 python-dotenv==1.0.0
 torch==1.13.1
+Werkzeug==2.2.3

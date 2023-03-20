@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Upload Audio File</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="audio_data">
+        <input type="submit" value="Upload">
+    </form>
+    <div id="result"></div>
+    
+    <script>
+        const form = document.querySelector('form');
+        const resultDiv = document.querySelector('#result');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form)
+            const response = await fetch('http://127.0.0.1:5000/upload-file', {
+            method: 'POST',
+            body: formData
+            })
+            const data = await response.json();
+            resultDiv.innerHTML = `Length (samples): ${data.length_samples}, Sample rate: ${data.sr}`;
+        });
+    </script>
+</body>
+</html>
